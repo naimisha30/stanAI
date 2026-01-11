@@ -1,112 +1,143 @@
-STAN – Emotion-Aware Conversational Chatbot Backend
+STAN – Conversational Chatbot Backend
+
+This project is a backend chatbot application developed as part of a company assignment.
+The objective of this project is to demonstrate backend development skills, AI integration, and clean system design.
+
+The chatbot is named Stan and is designed to behave like a friendly, emotionally aware conversational companion rather than a typical robotic chatbot.
 
 Project Overview
-This project is a backend conversational chatbot named STAN, developed using FastAPI and integrated with Google Gemini LLM.
-The goal of the project is to demonstrate how a modern chatbot system can be built with clean backend architecture, prompt engineering, basic long-term memory, emotion-aware interaction, and graceful error handling.
-The focus of this assignment is not on UI or deployment, but on backend design, AI integration, and system reliability, which are important in real-world applications.
 
-Problem Statement
-Traditional chatbots often respond in a robotic way, forget previous user information, or fail completely when an external AI service is unavailable.
-This project aims to solve these issues by:
-Creating a chatbot that can converse naturally
-Remember basic user-provided information
-spond empathetically to emotions
-Continue working even when the AI API quota is exhausted
-System Architecture
-The system is designed in a modular and simple architecture with the following components:
-FastAPI Backend
-Handles HTTP requests and responses using REST APIs.
-Prompt System
-Defines the chatbot’s personality, tone, safety rules, and behavior.
-Memory Module
-Stores lightweight user memory such as name and conversation context.
-LLM Integration (Gemini)
-Generates intelligent responses when the API is available.
-Fallback Logic
-Ensures the chatbot responds meaningfully even if the AI API fails.
-File Structure Explanation
+The application is built using FastAPI and integrates with Google Gemini to generate responses.
+It exposes a REST API that allows users to send messages and receive replies from the chatbot.
 
-main.py
-This is the core file of the project. It defines:
-The /chat API endpoint
-Request validation using Pydantic
-Memory extraction logic
-Prompt construction
-Gemini API call
-Emotion-based fallback responses
+The focus of this project is on:
 
-prompts.py
-Contains the system prompt that defines:
-Chatbot identity (Stan)
-Personality and tone
-Safety and honesty rules
-Memory usage behavior
-This ensures consistent, human-like responses across all interactions.
+Backend architecture
 
-memory.py
-Manages simple in-memory storage for:
-User profile information (example: name)
-Conversation context
-Only information explicitly shared by the user is stored to avoid hallucination and privacy issues.
+Prompt engineering
 
-.env.example
-Shows how environment variables are configured without exposing sensitive API keys.
-Chat Flow Explanation
-The user sends a message to the /chat endpoint.
-The backend checks if the message contains memory-related information (e.g., “my name is…”).
-If found, the information is stored in memory.
-Stored memory is injected into the prompt for personalization.
-The prompt is sent to the Gemini LLM to generate a response.
-If the LLM API fails (quota or error), the system switches to a smart fallback mechanism.
+AI integration
 
-Emotion Handling Design
-To improve interaction quality, the chatbot includes basic emotion detection when the AI API is unavailab
-The system prioritizes emotions over greetings, for example:
-“hello i am sad” → empathetic response
-“i am stressed about exams” → supportive response
-“i am happy today” → positive reinforcement
+Error handling and reliability
 
-This approach is:
-Lightweight
-Explainable
-Reliable for a student-level system
+No frontend interface is included, as the goal is to showcase backend functionality.
 
-Error Handling & Reliability
-All calls to the Gemini API are wrapped in a try-except block.
-If the API quota is exceeded or an error occurs:
-The backend does not crash
-A meaningful response is still returned
-The user experience remains smooth
-This demonstrates graceful degradation, which is a real-world backend best practice.
-Security Considerations
-API keys are stored using environment variables
-.env files are excluded from version control
-A .env.example file is provided for configuration guidance
-This ensures secure handling of sensitive credentials.
+Features
 
-Limitations
-Memory is stored in-memory and resets on server restart
-No frontend UI is implemented
-No database integration (intentional for simplicity)
-These limitations were chosen deliberately to keep the project focused, clean, and easy to evaluate.
+FastAPI-based REST API
 
-Future Enhancements
-The system can be extended by:
-Adding a database for persistent memory
-Implementing user authentication
-Adding a frontend interface
-Enhancing emotion detection with ML models
+Google Gemini integration for AI-generated responses
+
+System prompt to control chatbot personality and safety behavior
+
+Lightweight user memory (for example, remembering a user’s name)
+
+Emotion-aware fallback responses when the AI service is unavailable
+
+Secure handling of sensitive information using environment variables
+
+Clean and modular project structure
+
+How the Chatbot Works
+
+The chatbot exposes a single main endpoint:
+
+POST /chat
+
+
+Each request contains:
+
+user_id – used to identify the user and maintain memory
+
+message – the user’s input message
+
+For every request, the backend:
+
+Reads the user message
+
+Retrieves any stored user memory
+
+Builds a prompt using a fixed system prompt and memory context
+
+Sends the prompt to Gemini to generate a response
+
+If the Gemini API is unavailable or quota is exceeded, the system falls back to predefined, emotionally safe responses.
+This ensures the application remains stable and responsive at all times.
+
+Memory Design
+
+The chatbot uses a simple in-memory storage mechanism to store user information.
+Only information explicitly provided by the user is stored.
+
+Memory is:
+
+Used carefully and transparently
+
+Never assumed or fabricated
+
+Injected into the prompt only when available
+
+This keeps the system easy to understand and extend.
+
+Error Handling and Reliability
+
+All AI calls are wrapped in proper error handling.
+If an error occurs while communicating with the Gemini API, the chatbot still responds politely using fallback logic.
+
+This design prevents crashes and improves user experience, reflecting real-world backend best practices.
+
+Project Structure
+stanAI/
+│
+├── main.py        # FastAPI app and chat endpoint
+├── prompts.py     # System prompt defining chatbot behavior
+├── memory.py      # In-memory user memory logic
+├── README.md
+├── .gitignore
+└── __init__.py
+
+
+Sensitive files such as .env and the virtual environment are excluded from the repository for security reasons.
+
+Setup Instructions
+
+Clone the repository
+
+Create and activate a Python virtual environment
+
+Install required dependencies
+
+Create a .env file and add your Gemini API key
+
+Run the application using Uvicorn
+
+Once the server is running, the chatbot can be tested using Postman or similar API testing tools.
+
+API Usage Example
+
+Request:
+
+{
+  "user_id": "u1",
+  "message": "My name is Dinesh"
+}
+
+
+Response:
+
+{
+  "reply": "Hey Dinesh 🙂 How can I help you today?"
+}
+
+Limitations and Future Improvements
+
+User memory is stored in-memory and resets when the server restarts
+
+No frontend interface is included
+
+The project can be extended with database storage, authentication, or a frontend UI
 
 Conclusion
-This project demonstrates:
-Backend API development using FastAPI
-Integration of a large language model
-Prompt engineering for controlled behavior
 
-Basic memory handling
-
-Emotion-aware interaction
-
-Robust error handling and fallback logic
-
-Overall, the project reflects practical system design thinking, suitable for academic evaluation and real-world backend development scenarios.
+This project demonstrates how a conversational AI backend can be implemented with a clean structure, controlled AI behavior, and reliable error handling.
+The emphasis is on clarity, stability, and explainability rather than complexity.
