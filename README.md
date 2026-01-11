@@ -93,7 +93,9 @@ main.py
 prompts.py   
 memory.py      
 README.md
+
 .gitignore
+
 __init__.py
 
 
