@@ -88,13 +88,13 @@ This design prevents crashes and improves user experience, reflecting real-world
 
 Project Structure
 stanAI/
-│
-├── main.py        # FastAPI app and chat endpoint
-├── prompts.py     # System prompt defining chatbot behavior
-├── memory.py      # In-memory user memory logic
-├── README.md
-├── .gitignore
-└── __init__.py
+
+main.py        
+prompts.py   
+memory.py      
+README.md
+.gitignore
+__init__.py
 
 
 Sensitive files such as .env and the virtual environment are excluded from the repository for security reasons.
